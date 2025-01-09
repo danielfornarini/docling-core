@@ -121,7 +121,7 @@ class HierarchicalChunker(BaseChunker):
     merge_list_items: bool = True
 
     @classmethod
-    def _triplet_serialize(cls, table_df: DataFrame) -> str:
+    def _triplet_serialize(cls, table_df: DataFrame, include_header_corner_cell: bool = False, **kwargs: Any) -> str:
 
         # copy header as first row and shift all rows by one
         table_df.loc[-1] = table_df.columns  # type: ignore[call-overload]
@@ -133,8 +133,11 @@ class HierarchicalChunker(BaseChunker):
 
         nrows = table_df.shape[0]
         ncols = table_df.shape[1]
+
+        header_corner_cell = cols[0] if include_header_corner_cell else ""
+
         texts = [
-            f"{rows[i]}, {cols[j]} = {str(table_df.iloc[i, j]).strip()}"
+            f"{header_corner_cell} - {rows[i]}, {cols[j]} = {str(table_df.iloc[i, j]).strip()}".strip()
             for i in range(1, nrows)
             for j in range(1, ncols)
         ]
@@ -208,7 +211,7 @@ class HierarchicalChunker(BaseChunker):
                     if table_df.shape[0] < 1 or table_df.shape[1] < 2:
                         # at least two cols needed, as first column contains row headers
                         continue
-                    text = self._triplet_serialize(table_df=table_df)
+                    text = self._triplet_serialize(table_df=table_df, **kwargs)
                     captions = [
                         c.text for c in [r.resolve(dl_doc) for r in item.captions]
                     ] or None
