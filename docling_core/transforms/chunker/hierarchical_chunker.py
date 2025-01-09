@@ -134,10 +134,10 @@ class HierarchicalChunker(BaseChunker):
         nrows = table_df.shape[0]
         ncols = table_df.shape[1]
 
-        header_corner_cell = cols[0] if include_header_corner_cell else ""
+        header_corner_cell = cols[0] if f"{include_header_corner_cell} -" else ""
 
         texts = [
-            f"{header_corner_cell} - {rows[i]}, {cols[j]} = {str(table_df.iloc[i, j]).strip()}".strip()
+            f"{header_corner_cell} {rows[i]}, {cols[j]} = {str(table_df.iloc[i, j]).strip()}".strip()
             for i in range(1, nrows)
             for j in range(1, ncols)
         ]
