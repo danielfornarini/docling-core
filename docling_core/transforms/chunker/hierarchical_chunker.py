@@ -28,6 +28,7 @@ from docling_core.types.doc.document import (
     TextItem, PictureItem, PictureDescriptionData,
 )
 from docling_core.types.doc.labels import DocItemLabel
+from docling_core.utils.dict import dig
 
 _VERSION: Final = "1.0.0"
 
@@ -215,7 +216,7 @@ class HierarchicalChunker(BaseChunker):
                     captions = [
                         c.text for c in [r.resolve(dl_doc) for r in item.captions]
                     ] or None
-                elif isinstance(item, PictureItem) and isinstance(item.annotations[0], PictureDescriptionData):
+                elif isinstance(item, PictureItem) and isinstance(dig(item.annotations, 0), PictureDescriptionData):
                     text = f"\n\n{item.annotations[0].text}\n\n"
                 else:
                     continue
