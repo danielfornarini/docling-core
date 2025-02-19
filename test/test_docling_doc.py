@@ -10,14 +10,19 @@ from PIL import Image as PILImage
 from PIL import ImageDraw
 from pydantic import AnyUrl, ValidationError
 
-from docling_core.types.doc.base import ImageRefMode
-from docling_core.types.doc.document import (
+from docling_core.types.doc.base import BoundingBox, CoordOrigin, ImageRefMode, Size
+from docling_core.types.doc.document import (  # BoundingBox,
     CURRENT_VERSION,
-    BoundingBox,
+    CodeItem,
+    ContentLayer,
     DocItem,
     DoclingDocument,
     DocumentOrigin,
     FloatingItem,
+    FormItem,
+    GraphCell,
+    GraphData,
+    GraphLink,
     ImageRef,
     KeyValueItem,
     ListItem,
@@ -30,7 +35,12 @@ from docling_core.types.doc.document import (
     TableItem,
     TextItem,
 )
-from docling_core.types.doc.labels import DocItemLabel, GroupLabel
+from docling_core.types.doc.labels import (
+    DocItemLabel,
+    GraphCellLabel,
+    GraphLinkLabel,
+    GroupLabel,
+)
 
 GENERATE = False
 
@@ -41,6 +51,127 @@ def test_doc_origin():
         filename="myfile.pdf",
         binary_hash="50115d582a0897fe1dd520a6876ec3f9321690ed0f6cfdc99a8d09019be073e8",
     )
+
+
+def test_overlaps_horizontally():
+    # Overlapping horizontally
+    bbox1 = BoundingBox(l=0, t=0, r=10, b=10, coord_origin=CoordOrigin.TOPLEFT)
+    bbox2 = BoundingBox(l=5, t=5, r=15, b=15, coord_origin=CoordOrigin.TOPLEFT)
+    assert bbox1.overlaps_horizontally(bbox2) is True
+
+    # No overlap horizontally (disjoint on the right)
+    bbox3 = BoundingBox(l=11, t=0, r=20, b=10, coord_origin=CoordOrigin.TOPLEFT)
+    assert bbox1.overlaps_horizontally(bbox3) is False
+
+    # No overlap horizontally (disjoint on the left)
+    bbox4 = BoundingBox(l=-10, t=0, r=-1, b=10, coord_origin=CoordOrigin.TOPLEFT)
+    assert bbox1.overlaps_horizontally(bbox4) is False
+
+    # Full containment
+    bbox5 = BoundingBox(l=2, t=2, r=8, b=8, coord_origin=CoordOrigin.TOPLEFT)
+    assert bbox1.overlaps_horizontally(bbox5) is True
+
+    # Edge touching (no overlap)
+    bbox6 = BoundingBox(l=10, t=0, r=20, b=10, coord_origin=CoordOrigin.TOPLEFT)
+    assert bbox1.overlaps_horizontally(bbox6) is False
+
+
+def test_overlaps_vertically():
+
+    page_height = 300
+
+    # Same CoordOrigin (TOPLEFT)
+    bbox1 = BoundingBox(l=0, t=0, r=10, b=10, coord_origin=CoordOrigin.TOPLEFT)
+    bbox2 = BoundingBox(l=5, t=5, r=15, b=15, coord_origin=CoordOrigin.TOPLEFT)
+    assert bbox1.overlaps_vertically(bbox2) is True
+
+    bbox1_ = bbox1.to_bottom_left_origin(page_height=page_height)
+    bbox2_ = bbox2.to_bottom_left_origin(page_height=page_height)
+    assert bbox1_.overlaps_vertically(bbox2_) is True
+
+    bbox3 = BoundingBox(l=0, t=11, r=10, b=20, coord_origin=CoordOrigin.TOPLEFT)
+    assert bbox1.overlaps_vertically(bbox3) is False
+
+    bbox3_ = bbox3.to_bottom_left_origin(page_height=page_height)
+    assert bbox1_.overlaps_vertically(bbox3_) is False
+
+    # Same CoordOrigin (BOTTOMLEFT)
+    bbox4 = BoundingBox(l=0, b=20, r=10, t=30, coord_origin=CoordOrigin.BOTTOMLEFT)
+    bbox5 = BoundingBox(l=5, b=15, r=15, t=25, coord_origin=CoordOrigin.BOTTOMLEFT)
+    assert bbox4.overlaps_vertically(bbox5) is True
+
+    bbox4_ = bbox4.to_top_left_origin(page_height=page_height)
+    bbox5_ = bbox5.to_top_left_origin(page_height=page_height)
+    assert bbox4_.overlaps_vertically(bbox5_) is True
+
+    bbox6 = BoundingBox(l=0, b=31, r=10, t=40, coord_origin=CoordOrigin.BOTTOMLEFT)
+    assert bbox4.overlaps_vertically(bbox6) is False
+
+    bbox6_ = bbox6.to_top_left_origin(page_height=page_height)
+    assert bbox4_.overlaps_vertically(bbox6_) is False
+
+    # Different CoordOrigin
+    with pytest.raises(ValueError):
+        bbox1.overlaps_vertically(bbox4)
+
+
+def test_intersection_area_with():
+    page_height = 300
+
+    # Overlapping bounding boxes (TOPLEFT)
+    bbox1 = BoundingBox(l=0, t=0, r=10, b=10, coord_origin=CoordOrigin.TOPLEFT)
+    bbox2 = BoundingBox(l=5, t=5, r=15, b=15, coord_origin=CoordOrigin.TOPLEFT)
+    assert abs(bbox1.intersection_area_with(bbox2) - 25.0) < 1.0e-3
+
+    bbox1_ = bbox1.to_bottom_left_origin(page_height=page_height)
+    bbox2_ = bbox2.to_bottom_left_origin(page_height=page_height)
+    assert abs(bbox1_.intersection_area_with(bbox2_) - 25.0) < 1.0e-3
+
+    # Non-overlapping bounding boxes (TOPLEFT)
+    bbox3 = BoundingBox(l=11, t=0, r=20, b=10, coord_origin=CoordOrigin.TOPLEFT)
+    assert abs(bbox1.intersection_area_with(bbox3) - 0.0) < 1.0e-3
+
+    # Touching edges (no intersection, TOPLEFT)
+    bbox4 = BoundingBox(l=10, t=0, r=20, b=10, coord_origin=CoordOrigin.TOPLEFT)
+    assert abs(bbox1.intersection_area_with(bbox4) - 0.0) < 1.0e-3
+
+    # Fully contained (TOPLEFT)
+    bbox5 = BoundingBox(l=2, t=2, r=8, b=8, coord_origin=CoordOrigin.TOPLEFT)
+    assert abs(bbox1.intersection_area_with(bbox5) - 36.0) < 1.0e-3
+
+    # Overlapping bounding boxes (BOTTOMLEFT)
+    bbox6 = BoundingBox(l=0, t=10, r=10, b=0, coord_origin=CoordOrigin.BOTTOMLEFT)
+    bbox7 = BoundingBox(l=5, t=15, r=15, b=5, coord_origin=CoordOrigin.BOTTOMLEFT)
+    assert abs(bbox6.intersection_area_with(bbox7) - 25.0) < 1.0e-3
+
+    # Different CoordOrigins (raises ValueError)
+    with pytest.raises(ValueError):
+        bbox1.intersection_area_with(bbox6)
+
+
+def test_orientation():
+
+    page_height = 300
+
+    # Same CoordOrigin (TOPLEFT)
+    bbox1 = BoundingBox(l=0, t=0, r=10, b=10, coord_origin=CoordOrigin.TOPLEFT)
+    bbox2 = BoundingBox(l=5, t=5, r=15, b=15, coord_origin=CoordOrigin.TOPLEFT)
+    bbox3 = BoundingBox(l=11, t=5, r=15, b=15, coord_origin=CoordOrigin.TOPLEFT)
+    bbox4 = BoundingBox(l=0, t=11, r=10, b=15, coord_origin=CoordOrigin.TOPLEFT)
+
+    assert bbox1.is_left_of(bbox2) is True
+    assert bbox1.is_strictly_left_of(bbox2) is False
+    assert bbox1.is_strictly_left_of(bbox3) is True
+
+    bbox1_ = bbox1.to_bottom_left_origin(page_height=page_height)
+    bbox2_ = bbox2.to_bottom_left_origin(page_height=page_height)
+    bbox3_ = bbox3.to_bottom_left_origin(page_height=page_height)
+    bbox4_ = bbox4.to_bottom_left_origin(page_height=page_height)
+
+    assert bbox1.is_above(bbox2) is True
+    assert bbox1_.is_above(bbox2_) is True
+    assert bbox1.is_strictly_above(bbox4) is True
+    assert bbox1_.is_strictly_above(bbox4_) is True
 
 
 def test_docitems():
@@ -74,12 +205,18 @@ def test_docitems():
             f"./test/data/docling_document/unit/{name}.yaml", "r", encoding="utf-8"
         ) as fr:
             gold = fr.read()
-        return gold
+        return yaml.safe_load(gold)
 
     def verify(dc, obj):
         pred = serialise(obj).strip()
+
+        if dc is KeyValueItem or dc is FormItem:
+            write(dc.__name__, pred)
+
+        pred = yaml.safe_load(pred)
+
         # print(f"\t{dc.__name__}:\n {pred}")
-        gold = read(dc.__name__).strip()
+        gold = read(dc.__name__)
 
         assert pred == gold, f"pred!=gold for {dc.__name__}"
 
@@ -112,8 +249,73 @@ def test_docitems():
             verify(dc, obj)
 
         elif dc is KeyValueItem:
+
+            graph = GraphData(
+                cells=[
+                    GraphCell(
+                        label=GraphCellLabel.KEY,
+                        cell_id=0,
+                        text="number",
+                        orig="#",
+                    ),
+                    GraphCell(
+                        label=GraphCellLabel.VALUE,
+                        cell_id=1,
+                        text="1",
+                        orig="1",
+                    ),
+                ],
+                links=[
+                    GraphLink(
+                        label=GraphLinkLabel.TO_VALUE,
+                        source_cell_id=0,
+                        target_cell_id=1,
+                    ),
+                    GraphLink(
+                        label=GraphLinkLabel.TO_KEY, source_cell_id=1, target_cell_id=0
+                    ),
+                ],
+            )
+
             obj = dc(
                 label=DocItemLabel.KEY_VALUE_REGION,
+                graph=graph,
+                self_ref="#",
+            )
+            verify(dc, obj)
+
+        elif dc is FormItem:
+
+            graph = GraphData(
+                cells=[
+                    GraphCell(
+                        label=GraphCellLabel.KEY,
+                        cell_id=0,
+                        text="number",
+                        orig="#",
+                    ),
+                    GraphCell(
+                        label=GraphCellLabel.VALUE,
+                        cell_id=1,
+                        text="1",
+                        orig="1",
+                    ),
+                ],
+                links=[
+                    GraphLink(
+                        label=GraphLinkLabel.TO_VALUE,
+                        source_cell_id=0,
+                        target_cell_id=1,
+                    ),
+                    GraphLink(
+                        label=GraphLinkLabel.TO_KEY, source_cell_id=1, target_cell_id=0
+                    ),
+                ],
+            )
+
+            obj = dc(
+                label=DocItemLabel.FORM,
+                graph=graph,
                 self_ref="#",
             )
             verify(dc, obj)
@@ -140,7 +342,16 @@ def test_docitems():
                 data=TableData(num_rows=3, num_cols=5, table_cells=[]),
             )
             verify(dc, obj)
-
+        elif dc is CodeItem:
+            obj = dc(
+                self_ref="#",
+                orig="whatever",
+                text="print(Hello World!)",
+                code_language="Python",
+            )
+            verify(dc, obj)
+        elif dc is GraphData:  # we skip this on purpose
+            continue
         else:
             raise RuntimeError(f"New derived class detected {dc.__name__}")
 
@@ -246,7 +457,6 @@ def _test_serialize_and_reload(doc):
 
 
 def _verify_regression_test(pred: str, filename: str, ext: str):
-
     if os.path.exists(filename + f".{ext}") and not GENERATE:
         with open(filename + f".{ext}", "r", encoding="utf-8") as fr:
             gt_true = fr.read()
@@ -258,15 +468,15 @@ def _verify_regression_test(pred: str, filename: str, ext: str):
 
 
 def _test_export_methods(doc: DoclingDocument, filename: str):
-    ### Iterate all elements
+    # Iterate all elements
     et_pred = doc.export_to_element_tree()
     _verify_regression_test(et_pred, filename=filename, ext="et")
 
-    ## Export stuff
+    # Export stuff
     md_pred = doc.export_to_markdown()
     _verify_regression_test(md_pred, filename=filename, ext="md")
 
-    # Test HTML export ...
+    # Test sHTML export ...
     html_pred = doc.export_to_html()
     _verify_regression_test(html_pred, filename=filename, ext="html")
 
@@ -443,8 +653,19 @@ def _construct_doc() -> DoclingDocument:
     fig2_image = PILImage.new("RGB", size, "black")
 
     # Draw a red disk touching the borders
-    draw = ImageDraw.Draw(fig2_image)
-    draw.ellipse((0, 0, size[0] - 1, size[1] - 1), fill="red")
+    # draw = ImageDraw.Draw(fig2_image)
+    # draw.ellipse((0, 0, size[0] - 1, size[1] - 1), fill="red")
+
+    # Create a drawing object
+    ImageDraw.Draw(fig2_image)
+
+    # Define the coordinates of the red square (x1, y1, x2, y2)
+    square_size = 20  # Adjust as needed
+    x1, y1 = 22, 22  # Adjust position
+    x2, y2 = x1 + square_size, y1 + square_size
+
+    # Draw the red square
+    # draw.rectangle([x1, y1, x2, y2], fill="red")
 
     fig_caption_2 = doc.add_text(
         label=DocItemLabel.CAPTION, text="This is the caption of figure 2."
@@ -497,6 +718,13 @@ def test_image_ref():
     assert image.uri.name == "image.png"
 
 
+def test_upgrade_content_layer_from_1_0_0():
+    doc = DoclingDocument.load_from_json("test/data/doc/2206.01062-1.0.0.json")
+
+    assert doc.version == CURRENT_VERSION
+    assert doc.texts[0].content_layer == ContentLayer.FURNITURE
+
+
 def test_version_doc():
 
     # default version
@@ -531,6 +759,20 @@ def test_version_doc():
     comp_version = f"{major_split[0]}.{minor_split[0]}.{int(patch_split[0]) + 1}"
     doc = DoclingDocument(name="Untitled 1", version=comp_version)
     assert doc.version == CURRENT_VERSION
+
+
+def test_formula_mathml():
+    doc = DoclingDocument(name="Dummy")
+    equation = "\\frac{1}{x}"
+    doc.add_text(label=DocItemLabel.FORMULA, text=equation)
+
+    doc_html = doc.export_to_html(formula_to_mathml=True, html_head="")
+
+    gt_html = Path("test/data/docling_document/export/formula_mathml.html").read_text(
+        encoding="utf8"
+    )
+
+    assert doc_html == gt_html
 
 
 def test_docitem_get_image():

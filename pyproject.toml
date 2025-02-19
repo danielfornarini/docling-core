@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docling-core"
-version = "2.14.0"
+version = "2.20.0"
 description = "A python library to define and validate data types in Docling."
 license = "MIT"
 authors = [
@@ -53,12 +53,13 @@ pydantic = ">=2.6.0,<3.0.0,!=2.10.0,!=2.10.1,!=2.10.2"
 jsonref = "^1.1.0"
 tabulate = "^0.9.0"
 pandas = "^2.1.4"
-pillow = "^10.3.0"
+pillow = ">=10.0.0,<12.0.0"
 pyyaml = ">=5.1,<7.0.0"
 typing-extensions = "^4.12.2"
 transformers = { version = "^4.34.0", optional = true }
 semchunk = { version = "^2.2.0", optional = true }
 typer = "^0.12.5"
+latex2mathml = "^3.77.0"
 
 [tool.poetry.extras]
 chunking = ["transformers", "semchunk"]
@@ -78,6 +79,15 @@ jsondiff = "^2.0.0"
 types-setuptools = "^70.3.0"
 python-semantic-release = "^7.32.2"
 pandas-stubs = "^2.1.4.231227"
+
+[tool.poetry.group.constraints]
+optional = true
+
+[tool.poetry.group.constraints.dependencies]
+numpy = [
+    { version = ">=1.24.4,<3.0.0", markers = 'python_version >= "3.10"' },
+    { version = ">=1.24.4,<2.1.0", markers = 'python_version < "3.10"' },
+]
 
 [tool.setuptools.packages.find]
 where = ["docling_core/resources/schemas"]
@@ -127,6 +137,7 @@ module = [
     "jsonref.*",
     "jsonschema.*",
     "requests.*",
+    "semchunk.*",
     "tabulate.*",
     "transformers.*",
     "yaml.*",

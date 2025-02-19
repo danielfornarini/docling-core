@@ -111,7 +111,7 @@ class PictureClassificationLabel(str, Enum):
     SIGNATURE = "signature"
     STAMP = "stamp"
     QR_CODE = "qr_code"
-    BAR_CODE = "bat_code"
+    BAR_CODE = "bar_code"
     SCREENSHOT = "screenshot"
 
     # Geology/Geography
@@ -134,6 +134,95 @@ class TableCellLabel(str, Enum):
     ROW_HEADER = "row_header"
     ROW_SECTION = "row_section"
     BODY = "body"
+
+    def __str__(self):
+        """Get string value."""
+        return str(self.value)
+
+
+class GraphCellLabel(str, Enum):
+    """GraphCellLabel."""
+
+    UNSPECIFIED = "unspecified"
+
+    KEY = "key"
+    VALUE = "value"
+
+    CHECKBOX = "checkbox"
+
+
+class GraphLinkLabel(str, Enum):
+    """GraphLinkLabel."""
+
+    UNSPECIFIED = "unspecified"
+
+    TO_VALUE = "to_value"
+    TO_KEY = "to_key"
+
+    TO_PARENT = "to_parent"
+    TO_CHILD = "to_child"
+
+
+class CodeLanguageLabel(str, Enum):
+    """CodeLanguageLabel."""
+
+    ADA = "Ada"
+    AWK = "Awk"
+    BASH = "Bash"
+    BC = "bc"
+    C = "C"
+    C_SHARP = "C#"
+    C_PLUS_PLUS = "C++"
+    CMAKE = "CMake"
+    COBOL = "COBOL"
+    CSS = "CSS"
+    CEYLON = "Ceylon"
+    CLOJURE = "Clojure"
+    CRYSTAL = "Crystal"
+    CUDA = "Cuda"
+    CYTHON = "Cython"
+    D = "D"
+    DART = "Dart"
+    DC = "dc"
+    DOCKERFILE = "Dockerfile"
+    ELIXIR = "Elixir"
+    ERLANG = "Erlang"
+    FORTRAN = "FORTRAN"
+    FORTH = "Forth"
+    GO = "Go"
+    HTML = "HTML"
+    HASKELL = "Haskell"
+    HAXE = "Haxe"
+    JAVA = "Java"
+    JAVASCRIPT = "JavaScript"
+    JULIA = "Julia"
+    KOTLIN = "Kotlin"
+    LISP = "Lisp"
+    LUA = "Lua"
+    MATLAB = "Matlab"
+    MOONSCRIPT = "MoonScript"
+    NIM = "Nim"
+    OCAML = "OCaml"
+    OBJECTIVEC = "ObjectiveC"
+    OCTAVE = "Octave"
+    PHP = "PHP"
+    PASCAL = "Pascal"
+    PERL = "Perl"
+    PROLOG = "Prolog"
+    PYTHON = "Python"
+    RACKET = "Racket"
+    RUBY = "Ruby"
+    RUST = "Rust"
+    SML = "SML"
+    SQL = "SQL"
+    SCALA = "Scala"
+    SCHEME = "Scheme"
+    SWIFT = "Swift"
+    TYPESCRIPT = "TypeScript"
+    UNKNOWN = "unknown"
+    VISUALBASIC = "VisualBasic"
+    XML = "XML"
+    YAML = "YAML"
 
     def __str__(self):
         """Get string value."""

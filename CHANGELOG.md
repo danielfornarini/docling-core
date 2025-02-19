@@ -1,3 +1,93 @@
+## [v2.20.0](https://github.com/DS4SD/docling-core/releases/tag/v2.20.0) - 2025-02-19
+
+### Feature
+
+* Introduce Key-Value and Forms items ([#158](https://github.com/DS4SD/docling-core/issues/158)) ([`d622800`](https://github.com/DS4SD/docling-core/commit/d6228007502fc1f27400059eae7bb768209c0a6f))
+
+## [v2.19.1](https://github.com/DS4SD/docling-core/releases/tag/v2.19.1) - 2025-02-17
+
+### Fix
+
+* Expose included_content_layers arg in export/save methods for MD+HTML ([#164](https://github.com/DS4SD/docling-core/issues/164)) ([`c46995b`](https://github.com/DS4SD/docling-core/commit/c46995bca39fbaa2a9d1fb68c5c9cb5beb6d6722))
+
+## [v2.19.0](https://github.com/DS4SD/docling-core/releases/tag/v2.19.0) - 2025-02-17
+
+### Feature
+
+* Redefine CodeItem as floating object with captions ([#160](https://github.com/DS4SD/docling-core/issues/160)) ([`916323f`](https://github.com/DS4SD/docling-core/commit/916323fb55274753aa1d6a4928388a35417f94b6))
+* Implementation of doc tags ([#138](https://github.com/DS4SD/docling-core/issues/138)) ([`f751b45`](https://github.com/DS4SD/docling-core/commit/f751b45b62fb318929f8131ab82fa17db98e8e44))
+
+### Fix
+
+* Document Tokens (doc tags) clean up, fix iterate_items for content_layer ([#161](https://github.com/DS4SD/docling-core/issues/161)) ([`58ed6c8`](https://github.com/DS4SD/docling-core/commit/58ed6c8ab75ba179faf1598b9877662cdcc4c1d3))
+* Fix inheritance of CodeItem for backward compatibility ([#162](https://github.com/DS4SD/docling-core/issues/162)) ([`7267c3f`](https://github.com/DS4SD/docling-core/commit/7267c3f5716d3f292592d3b11ddd2b0db4392c20))
+
+## [v2.18.1](https://github.com/DS4SD/docling-core/releases/tag/v2.18.1) - 2025-02-13
+
+### Fix
+
+* Update Pillow constraints ([#157](https://github.com/DS4SD/docling-core/issues/157)) ([`a9afeda`](https://github.com/DS4SD/docling-core/commit/a9afeda6d1251900142571f7bff3d00d871d5915))
+
+## [v2.18.0](https://github.com/DS4SD/docling-core/releases/tag/v2.18.0) - 2025-02-10
+
+### Feature
+
+* Add ContentLayer attribute to designate items to body or furniture ([#148](https://github.com/DS4SD/docling-core/issues/148)) ([`786f0c6`](https://github.com/DS4SD/docling-core/commit/786f0c68336a7b9cced5fb0cb66427b050955e32))
+
+## [v2.17.2](https://github.com/DS4SD/docling-core/releases/tag/v2.17.2) - 2025-02-06
+
+### Fix
+
+* Define LTR/RTL text direction in HTML export ([#152](https://github.com/DS4SD/docling-core/issues/152)) ([`3cf31cb`](https://github.com/DS4SD/docling-core/commit/3cf31cbe384e3f77a375aa057ef61d156d990b23))
+
+## [v2.17.1](https://github.com/DS4SD/docling-core/releases/tag/v2.17.1) - 2025-02-03
+
+### Fix
+
+* Image fallback for malformed equations ([#149](https://github.com/DS4SD/docling-core/issues/149)) ([`eb9b4b3`](https://github.com/DS4SD/docling-core/commit/eb9b4b39a1a2f81baf72d3fa3bbc7cd8ed594c1c))
+
+## [v2.17.0](https://github.com/DS4SD/docling-core/releases/tag/v2.17.0) - 2025-02-03
+
+### Feature
+
+* **HTML:** Fallback showing formulas as images ([#146](https://github.com/DS4SD/docling-core/issues/146)) ([`23477f7`](https://github.com/DS4SD/docling-core/commit/23477f76741b3593734287776fdf5e0761558c2d))
+* **HTML:** Export formulas with mathml ([#144](https://github.com/DS4SD/docling-core/issues/144)) ([`ed36437`](https://github.com/DS4SD/docling-core/commit/ed36437346177b9249c98df3eb5ddeadef004c59))
+
+### Fix
+
+* Add html escape in md export and fix formula escapes ([#143](https://github.com/DS4SD/docling-core/issues/143)) ([`c6590e8`](https://github.com/DS4SD/docling-core/commit/c6590e83e28626e4a6b62fdbd270cb794bf10918))
+
+## [v2.16.1](https://github.com/DS4SD/docling-core/releases/tag/v2.16.1) - 2025-01-30
+
+### Fix
+
+* Add newline to md formula export ([#142](https://github.com/DS4SD/docling-core/issues/142)) ([`d07a87e`](https://github.com/DS4SD/docling-core/commit/d07a87e1fbc777cd6d01c7646d714a44a69bc123))
+
+## [v2.16.0](https://github.com/DS4SD/docling-core/releases/tag/v2.16.0) - 2025-01-29
+
+### Feature
+
+* Escape underscores that are within latex equations ([#137](https://github.com/DS4SD/docling-core/issues/137)) ([`0d5cd11`](https://github.com/DS4SD/docling-core/commit/0d5cd11326d8521360add6ffaa3de845bf72abe2))
+* Add escaping_underscores option to markdown export ([#135](https://github.com/DS4SD/docling-core/issues/135)) ([`c9739b2`](https://github.com/DS4SD/docling-core/commit/c9739b2c6cf0686747fbda5331e1fd1a174bb91f))
+* Added the geometric operations to BoundingBox ([#136](https://github.com/DS4SD/docling-core/issues/136)) ([`f02bbae`](https://github.com/DS4SD/docling-core/commit/f02bbaea47ebbfe98265f530b0b62dd2a6ac1ecd))
+
+## [v2.15.1](https://github.com/DS4SD/docling-core/releases/tag/v2.15.1) - 2025-01-21
+
+### Fix
+
+* Backward compatible add_text() ([#132](https://github.com/DS4SD/docling-core/issues/132)) ([`7e45817`](https://github.com/DS4SD/docling-core/commit/7e458179d8ec46017fd90114a55360daf419f926))
+
+## [v2.15.0](https://github.com/DS4SD/docling-core/releases/tag/v2.15.0) - 2025-01-21
+
+### Feature
+
+* Add CodeItem as pydantic type, update export methods and APIs ([#129](https://github.com/DS4SD/docling-core/issues/129)) ([`c940aa5`](https://github.com/DS4SD/docling-core/commit/c940aa5ca9b345333e3e95d8c0ec32ddfa227385))
+
+### Fix
+
+* Fix hybrid chunker token constraint ([#131](https://github.com/DS4SD/docling-core/issues/131)) ([`b741eea`](https://github.com/DS4SD/docling-core/commit/b741eeaab437781e36f9d356478ef525ef54867b))
+* Always return a new bbox when changing origin ([#128](https://github.com/DS4SD/docling-core/issues/128)) ([`841668f`](https://github.com/DS4SD/docling-core/commit/841668f416f2079afc6f8ab07e5507aacce59de3))
+
 ## [v2.14.0](https://github.com/DS4SD/docling-core/releases/tag/v2.14.0) - 2025-01-10
 
 ### Feature

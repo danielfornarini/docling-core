@@ -162,6 +162,181 @@
       "title": "ChartStackedBar",
       "type": "object"
     },
+    "CodeItem": {
+      "additionalProperties": false,
+      "description": "CodeItem.",
+      "properties": {
+        "self_ref": {
+          "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+          "title": "Self Ref",
+          "type": "string"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RefItem"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "children": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "Children",
+          "type": "array"
+        },
+        "content_layer": {
+          "$ref": "#/$defs/ContentLayer",
+          "default": "body"
+        },
+        "label": {
+          "const": "code",
+          "default": "code",
+          "title": "Label",
+          "type": "string"
+        },
+        "prov": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ProvenanceItem"
+          },
+          "title": "Prov",
+          "type": "array"
+        },
+        "orig": {
+          "title": "Orig",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "captions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "Captions",
+          "type": "array"
+        },
+        "references": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "References",
+          "type": "array"
+        },
+        "footnotes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "Footnotes",
+          "type": "array"
+        },
+        "image": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ImageRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "code_language": {
+          "$ref": "#/$defs/CodeLanguageLabel",
+          "default": "unknown"
+        }
+      },
+      "required": [
+        "self_ref",
+        "orig",
+        "text"
+      ],
+      "title": "CodeItem",
+      "type": "object"
+    },
+    "CodeLanguageLabel": {
+      "description": "CodeLanguageLabel.",
+      "enum": [
+        "Ada",
+        "Awk",
+        "Bash",
+        "bc",
+        "C",
+        "C#",
+        "C++",
+        "CMake",
+        "COBOL",
+        "CSS",
+        "Ceylon",
+        "Clojure",
+        "Crystal",
+        "Cuda",
+        "Cython",
+        "D",
+        "Dart",
+        "dc",
+        "Dockerfile",
+        "Elixir",
+        "Erlang",
+        "FORTRAN",
+        "Forth",
+        "Go",
+        "HTML",
+        "Haskell",
+        "Haxe",
+        "Java",
+        "JavaScript",
+        "Julia",
+        "Kotlin",
+        "Lisp",
+        "Lua",
+        "Matlab",
+        "MoonScript",
+        "Nim",
+        "OCaml",
+        "ObjectiveC",
+        "Octave",
+        "PHP",
+        "Pascal",
+        "Perl",
+        "Prolog",
+        "Python",
+        "Racket",
+        "Ruby",
+        "Rust",
+        "SML",
+        "SQL",
+        "Scala",
+        "Scheme",
+        "Swift",
+        "TypeScript",
+        "unknown",
+        "VisualBasic",
+        "XML",
+        "YAML"
+      ],
+      "title": "CodeLanguageLabel",
+      "type": "string"
+    },
+    "ContentLayer": {
+      "description": "ContentLayer.",
+      "enum": [
+        "body",
+        "furniture"
+      ],
+      "title": "ContentLayer",
+      "type": "string"
+    },
     "CoordOrigin": {
       "description": "CoordOrigin.",
       "enum": [
@@ -211,6 +386,215 @@
       "title": "DocumentOrigin",
       "type": "object"
     },
+    "FormItem": {
+      "additionalProperties": false,
+      "description": "FormItem.",
+      "properties": {
+        "self_ref": {
+          "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+          "title": "Self Ref",
+          "type": "string"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RefItem"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "children": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "Children",
+          "type": "array"
+        },
+        "content_layer": {
+          "$ref": "#/$defs/ContentLayer",
+          "default": "body"
+        },
+        "label": {
+          "const": "form",
+          "default": "form",
+          "title": "Label",
+          "type": "string"
+        },
+        "prov": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ProvenanceItem"
+          },
+          "title": "Prov",
+          "type": "array"
+        },
+        "captions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "Captions",
+          "type": "array"
+        },
+        "references": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "References",
+          "type": "array"
+        },
+        "footnotes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "Footnotes",
+          "type": "array"
+        },
+        "image": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ImageRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "graph": {
+          "$ref": "#/$defs/GraphData"
+        }
+      },
+      "required": [
+        "self_ref",
+        "graph"
+      ],
+      "title": "FormItem",
+      "type": "object"
+    },
+    "GraphCell": {
+      "description": "GraphCell.",
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/GraphCellLabel"
+        },
+        "cell_id": {
+          "title": "Cell Id",
+          "type": "integer"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "orig": {
+          "title": "Orig",
+          "type": "string"
+        },
+        "prov": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProvenanceItem"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "item_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RefItem"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "label",
+        "cell_id",
+        "text",
+        "orig"
+      ],
+      "title": "GraphCell",
+      "type": "object"
+    },
+    "GraphCellLabel": {
+      "description": "GraphCellLabel.",
+      "enum": [
+        "unspecified",
+        "key",
+        "value",
+        "checkbox"
+      ],
+      "title": "GraphCellLabel",
+      "type": "string"
+    },
+    "GraphData": {
+      "description": "GraphData.",
+      "properties": {
+        "cells": {
+          "items": {
+            "$ref": "#/$defs/GraphCell"
+          },
+          "title": "Cells",
+          "type": "array"
+        },
+        "links": {
+          "items": {
+            "$ref": "#/$defs/GraphLink"
+          },
+          "title": "Links",
+          "type": "array"
+        }
+      },
+      "title": "GraphData",
+      "type": "object"
+    },
+    "GraphLink": {
+      "description": "GraphLink.",
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/GraphLinkLabel"
+        },
+        "source_cell_id": {
+          "title": "Source Cell Id",
+          "type": "integer"
+        },
+        "target_cell_id": {
+          "title": "Target Cell Id",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "label",
+        "source_cell_id",
+        "target_cell_id"
+      ],
+      "title": "GraphLink",
+      "type": "object"
+    },
+    "GraphLinkLabel": {
+      "description": "GraphLinkLabel.",
+      "enum": [
+        "unspecified",
+        "to_value",
+        "to_key",
+        "to_parent",
+        "to_child"
+      ],
+      "title": "GraphLinkLabel",
+      "type": "string"
+    },
     "GroupItem": {
       "additionalProperties": false,
       "description": "GroupItem.",
@@ -238,6 +622,10 @@
           },
           "title": "Children",
           "type": "array"
+        },
+        "content_layer": {
+          "$ref": "#/$defs/ContentLayer",
+          "default": "body"
         },
         "name": {
           "default": "group",
@@ -338,6 +726,10 @@
           "title": "Children",
           "type": "array"
         },
+        "content_layer": {
+          "$ref": "#/$defs/ContentLayer",
+          "default": "body"
+        },
         "label": {
           "const": "key_value_region",
           "default": "key_value_region",
@@ -351,10 +743,49 @@
           },
           "title": "Prov",
           "type": "array"
+        },
+        "captions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "Captions",
+          "type": "array"
+        },
+        "references": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "References",
+          "type": "array"
+        },
+        "footnotes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RefItem"
+          },
+          "title": "Footnotes",
+          "type": "array"
+        },
+        "image": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ImageRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "graph": {
+          "$ref": "#/$defs/GraphData"
         }
       },
       "required": [
-        "self_ref"
+        "self_ref",
+        "graph"
       ],
       "title": "KeyValueItem",
       "type": "object"
@@ -386,6 +817,10 @@
           },
           "title": "Children",
           "type": "array"
+        },
+        "content_layer": {
+          "$ref": "#/$defs/ContentLayer",
+          "default": "body"
         },
         "label": {
           "const": "list_item",
@@ -594,6 +1029,10 @@
           },
           "title": "Children",
           "type": "array"
+        },
+        "content_layer": {
+          "$ref": "#/$defs/ContentLayer",
+          "default": "body"
         },
         "label": {
           "const": "picture",
@@ -992,6 +1431,10 @@
           "title": "Children",
           "type": "array"
         },
+        "content_layer": {
+          "$ref": "#/$defs/ContentLayer",
+          "default": "body"
+        },
         "label": {
           "const": "section_header",
           "default": "section_header",
@@ -1170,6 +1613,10 @@
           "title": "Children",
           "type": "array"
         },
+        "content_layer": {
+          "$ref": "#/$defs/ContentLayer",
+          "default": "body"
+        },
         "label": {
           "default": "table",
           "enum": [
@@ -1261,12 +1708,15 @@
           "title": "Children",
           "type": "array"
         },
+        "content_layer": {
+          "$ref": "#/$defs/ContentLayer",
+          "default": "body"
+        },
         "label": {
           "enum": [
             "caption",
             "checkbox_selected",
             "checkbox_unselected",
-            "code",
             "footnote",
             "formula",
             "page_footer",
@@ -1315,7 +1765,7 @@
       "type": "string"
     },
     "version": {
-      "default": "1.0.0",
+      "default": "1.1.0",
       "pattern": "^(?P<major>0|[1-9]\\d*)\\.(?P<minor>0|[1-9]\\d*)\\.(?P<patch>0|[1-9]\\d*)(?:-(?P<prerelease>(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
       "title": "Version",
       "type": "string"
@@ -1341,9 +1791,11 @@
         "self_ref": "#/furniture",
         "parent": null,
         "children": [],
+        "content_layer": "furniture",
         "name": "_root_",
         "label": "unspecified"
-      }
+      },
+      "deprecated": true
     },
     "body": {
       "$ref": "#/$defs/GroupItem",
@@ -1351,6 +1803,7 @@
         "self_ref": "#/body",
         "parent": null,
         "children": [],
+        "content_layer": "body",
         "name": "_root_",
         "label": "unspecified"
       }
@@ -1375,6 +1828,9 @@
           },
           {
             "$ref": "#/$defs/TextItem"
+          },
+          {
+            "$ref": "#/$defs/CodeItem"
           }
         ]
       },
@@ -1403,6 +1859,14 @@
         "$ref": "#/$defs/KeyValueItem"
       },
       "title": "Key Value Items",
+      "type": "array"
+    },
+    "form_items": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/FormItem"
+      },
+      "title": "Form Items",
       "type": "array"
     },
     "pages": {
